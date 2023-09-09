@@ -15,7 +15,7 @@ func TestFowlerNollVo32(t *testing.T) {
 
 	t.Run("FowlerNollVo32", func(t *testing.T) {
 		for _, tc := range testCases {
-			actual := fowlerNollVo32(tc.input)
+			actual := FowlerNollVo32(tc.input)
 			if actual != tc.expected {
 				t.Errorf("fowlerNollVo32(%q) = %d; expected %d", tc.input, actual, tc.expected)
 			}
