@@ -16,9 +16,8 @@ func (t *TextVec) PrintRawText() {
 }
 
 // CalculateVector takes a text and calculates its vector representation
-// The text is split into words using the SplitWords function
-// The word frequencies are calculated using the map[string]int type
-// The word frequencies are then used to calculate the vector representation of the text
+// The text is split into words using the SplitWords functionthen each the
+// word frequencies are then used to calculate the vector representation of the text
 func (t *TextVec) CalculateVector(dimension uint64) {
 	totalWords := 0
 	for _, v := range t.WordFreq {
@@ -34,12 +33,10 @@ func (t *TextVec) CalculateVector(dimension uint64) {
 	}
 }
 
-// Convert a text to a vector of floats
-// The vector is initialized with zeros and then updated with the word counts
-// The word counts are hashed to a random index in the vector
-// The vector is returned
-// The vector is used to represent the text in a machine learning model
-// The dimension is a hyperparameter that can be tuned
+// Text2Vec converts a text to a vector of floats
+// A vector is initialized with zeros and then updated
+// with word counts that are hashed to a random index in the vector
+// After that the vector is returned
 // The dimension should be larger than the number of unique words in the text
 func Text2Vec(text string, dimension uint64) []float64 {
 	// Convert the input text to lowercase and split it into words
