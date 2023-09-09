@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -9,10 +8,6 @@ type TextVec struct {
 	RawText  string
 	WordFreq map[string]int
 	Vector   []float64
-}
-
-func (t *TextVec) PrintRawText() {
-	fmt.Println(t.RawText)
 }
 
 // CalculateVector takes a text and calculates its vector representation
@@ -56,7 +51,7 @@ func Text2Vec(text string, dimension uint64) []float64 {
 	// Update the vector with the word counts
 	for word, count := range wordCounts {
 		// Hash the word to an integer between 0 and dimension-1
-		hash := uint32(fowlerNollVo32(word)) % uint32(dimension)
+		hash := uint32(FowlerNollVo32(word)) % uint32(dimension)
 
 		// Use the hash as the index into the vector
 		vector[hash] += float64(count)
