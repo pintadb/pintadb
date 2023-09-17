@@ -3,7 +3,9 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path"
 
+	"github.com/columbusearch/pintadb/server"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -11,6 +13,7 @@ import (
 var (
 	// Used for flags.
 	cfgFile     string
+	cfg         server.Config
 	userLicense string
 
 	rootCmd = &cobra.Command{
@@ -28,10 +31,14 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.pinta/config.yaml)")
 	rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "Author name for copyright attribution")
 	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "Name of license for the project (can provide `licensetext` in config)")
 	rootCmd.PersistentFlags().Bool("viper", true, "Use Viper for configuration")
+	rootCmd.PersistentFlags().StringVarP(&cfg.FullPath, "fullPath", "", "", "Path to the database file (default is $HOME/.pinta/data/pinta.db)")
+	rootCmd.PersistentFlags().Uint64VarP(&cfg.Dimension, "dimension", "", 300, "Dimension of the text vectors")
+	rootCmd.PersistentFlags().Uint64VarP(&cfg.HTTPPort, "httpPort", "", 4880, "Port for the HTTP server")
+	rootCmd.PersistentFlags().Uint64VarP(&cfg.GRPCPort, "grpcPort", "", 4882, "Port for the GRPC server")
 	viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author"))
 	viper.SetDefault("author", "NAME HERE <EMAIL ADDRESS>")
 	viper.SetDefault("license", "apache")
@@ -51,8 +58,9 @@ func initConfig() {
 		}
 
 		// Search config in home directory with name ".pinta  " (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigName(".pinta")
+		viper.AddConfigPath(path.Join(home, ".pinta"))
+		viper.SetConfigType("yaml")
+		viper.SetConfigName("config")
 	}
 
 	if err := viper.ReadInConfig(); err != nil {
